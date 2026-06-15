@@ -10,3 +10,6 @@ sudo pacman-key --lsign-key F3B607488DB35A47
 
 sudo pacman -U https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-keyring-latest-any.pkg.tar.zst
 sudo pacman -U https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-repo-1-1-any.pkg.tar.zst
+
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
