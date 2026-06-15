@@ -1,0 +1,51 @@
+
+sudo pacman -S --noconfirm tlp tlp-rdw acpi_call && \
+sudo systemctl enable --now tlp && \
+sudo systemctl mask systemd-rfkill.service systemd-rfkill.socket
+
+sudo tlp setcharge 70 80 BAT0 2>/dev/null || echo "BAT0 не найден, пропускаем"
+
+sudo mkdir -p /etc/X11/xorg.conf.d && \
+sudo tee /etc/X11/xorg.conf.d/20-thinkpad.conf > /dev/null << 'EOF'
+Section "InputClass"
+    Identifier "TrackPoint"
+    MatchIsPointer "on"
+    MatchProduct "TPPS/2 IBM TrackPoint"
+    Option "AccelSpeed" "0.5"
+    Option "AccelerationProfile" "2"
+EndSection
+
+Section "InputClass"
+    Identifier "TouchPad"
+    MatchIsTouchpad "on"
+    MatchProduct "Synaptics"
+    Option "NaturalScrolling" "true"
+    Option "Tapping" "true"
+    Option "ClickMethod" "clickfinger"
+EndSection
+EOF
+
+sudo pacman -S --noconfirm iio-sensor-proxy
+
+sudo pacman -S --noconfirm autorandr
+
+sudo pacman -S --noconfirm light && \
+sudo usermod -aG video $USER
+
+sudo pacman -S --noconfirm pipewire wireplumber pavucontrol
+
+sudo systemctl enable --now fstrim.timer
+
+
+sudo pacman -S --noconfirm thinkfan && \
+sudo systemctl enable --now thinkfan
+
+
+sudo pacman -S --noconfirm bluez bluez-utils && \
+sudo systemctl enable --now bluetooth && \
+sudo tee /etc/udev/rules.d/50-bluetooth.rules > /dev/null << 'EOF'
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="8087", ATTR{idProduct}=="0a2a", ATTR{power/control}="on"
+EOF
+
+echo "===== All install ====="
+echo "please reboot your thinkpad"
